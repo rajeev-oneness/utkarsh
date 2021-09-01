@@ -5,9 +5,109 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Vendor,App\Models\State;
+use App\Models\vendorItems;
+use App\Models\Product,DB;
+use App\Models\VendorPurchaseOrder;
+use App\Models\VendorPurchaseProductOrder;
 
 class VendorController extends Controller
 {
+    public function purchaseOrder(Request $req)
+    {
+        $purchaseOrder = VendorPurchaseOrder::with('vendor')->with('purchase_items')->latest()->paginate(20);
+        return view('admin.vendor.purchase.list',compact('purchaseOrder'));
+    }
+
+    public function purchaseOrderCreate(Request $req)
+    {
+        $vendors = Vendor::orderBy('name')->get();
+        if($req->ajax()){
+            $vendorItems = [];
+            if(!empty($req->vendorId)){
+                $vendorItems = vendorItems::where('vendorId',$req->vendorId)->with('product')->get();
+            }
+            return response()->json(['error' => false,'message' => 'List','vendorItem' => $vendorItems]);
+        }
+        return view('admin.vendor.purchase.create',compact('vendors'));
+    }
+
+    public function purchaseOrderSave(Request $req)
+    {
+        $this->validate($req,[
+            'vendor' => 'required|min:1|numeric',
+            'ship_to' => 'required|string',
+            'items' => 'required|array',
+            'items.*' => 'required|min:1|numeric',
+            'quantity' => 'required|array',
+            'quantity.*' => 'required|min:1|numeric',
+        ]);
+        DB::beginTransaction();
+        try {
+            $vendor = Vendor::findOrFail($req->vendor);
+            $newOrder = new VendorPurchaseOrder();
+            $newOrder->vendorId = $vendor->id;
+            $newOrder->ship_to = $req->ship_to;
+            $newOrder->save();
+            foreach ($req->items as $key => $items) {
+                $newItems = new VendorPurchaseProductOrder();
+                $newItems->vendorId = $vendor->id;
+                $newItems->vendorPurchaseOrderId = $newOrder->id;
+                $newItems->vendorItemId = $items;
+                $newItems->quantity = $req->quantity[$key];
+                $newItems->save();
+            }
+            DB::commit();
+            return redirect(route('admin.vendor.purchase.order.list'));
+        } catch (Exception $e) {
+            DB::rollback();
+            return back();
+        } 
+    }
+
+    public function purchaseOrderView(Request $req,$orderId)
+    {
+        $order = VendorPurchaseOrder::findOrFail($orderId);
+        return view('admin.vendor.purchase.order.view',compact('order'));
+    }
+
+    public function vendorAssignItem(Request $req)
+    {
+        $vendors = Vendor::orderBy('name')->get();
+        if($req->ajax()){
+            $vendorItems = [];$expect = [];
+            if(!empty($req->vendorId)){
+                $vendorItems = vendorItems::where('vendorId',$req->vendorId)/*->with('product')*/->get();
+            }
+            $product = Product::select('*')->orderBy('name')->get();
+            return response()->json(['error' => false,'message' => 'List','vendorItem' => $vendorItems,'product'=>$product]);
+        }
+        return view('admin.vendor.assignItem',compact('vendors'));
+    }
+
+    public function vendorAssignItemPost(Request $req)
+    {
+        $this->validate($req,[
+            'vendor' => 'required|min:1|numeric',
+            'products' => 'required|array',
+            'products.*' => 'required|min:1|numeric',
+        ]);
+        $vendor = Vendor::findOrFail($req->vendor);$excepted = [];
+        foreach ($req->products as $key => $selected) {
+            $product = vendorItems::where('vendorId',$vendor->id)->where('productId',$selected)->first();
+            if(!$product){
+                $new = new vendorItems();
+                $new->vendorId = $vendor->id;
+                $new->productId = $selected;
+                $new->save();
+                array_push($excepted, $new->id); // leave the New Entry
+            }else{
+                array_push($excepted, $product->id);// leave the Oldest One
+            }
+        }
+        vendorItems::whereNotIn('id',$excepted)->where('vendorId',$vendor->id)->delete();
+        return back();
+    }
+
     public function index(Request $req)
     {
         $vendor = Vendor::latest()->paginate(20);

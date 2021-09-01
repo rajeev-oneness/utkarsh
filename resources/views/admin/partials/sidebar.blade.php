@@ -11,6 +11,18 @@
                 <span class="app-menu__label">Vendor</span>
             </a>
         </li>
+        <li>
+            <a class="app-menu__item  {{ Route::currentRouteName() == 'admin.vendor.product.assign.*' ? 'active' : '' }}" href="{{ route('admin.vendor.product.assign.list') }}"><i class="app-menu__icon fa fa-dashboard"></i>
+                <span class="app-menu__label">Vendor Items</span>
+            </a>
+        </li>
+
+        <li>
+            <a class="app-menu__item  {{ Route::currentRouteName() == 'admin.vendor.purchase.order.*' ? 'active' : '' }}" href="{{ route('admin.vendor.purchase.order.list') }}"><i class="app-menu__icon fa fa-dashboard"></i>
+                <span class="app-menu__label">Purchase Order</span>
+            </a>
+        </li>
+
         <li class="treeview">
             <a class="app-menu__item" href="#" data-toggle="treeview">
                 <i class="app-menu__icon fa fa-group"></i>

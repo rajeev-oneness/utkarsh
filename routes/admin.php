@@ -32,6 +32,18 @@ Route::group(['prefix' => 'admin'], function () {
 	       Route::get('{vendorId}/delete','Admin\VendorController@delete')->name('admin.vendor.delete');
 	    });
 
+	    Route::group(['prefix' => 'vendor/product/items'],function(){
+			Route::get('assign/list','Admin\VendorController@vendorAssignItem')->name('admin.vendor.product.assign.list');
+			Route::post('assign/list','Admin\VendorController@vendorAssignItemPost')->name('admin.vendor.product.assign.post');
+	    });
+
+	    Route::group(['prefix' => 'vendor/purchase/order'],function(){
+			Route::get('list','Admin\VendorController@purchaseOrder')->name('admin.vendor.purchase.order.list');
+			Route::get('create','Admin\VendorController@purchaseOrderCreate')->name('admin.vendor.purchase.order.create');
+			Route::post('save','Admin\VendorController@purchaseOrderSave')->name('admin.vendor.purchase.order.save');
+			Route::get('{orderId}/view','Admin\VendorController@purchaseOrderView')->name('admin.vendor.purchase.order.view');
+	    });
+
 		Route::get('/invite_list', 'Admin\InvitationController@index')->name('admin.invite');
 	    Route::get('/invitation', 'Admin\InvitationController@create')->name('admin.invite.create');
 		Route::post('/invitation', 'Admin\InvitationController@store')->name('admin.invitation.store');
