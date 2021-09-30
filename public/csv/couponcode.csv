@@ -1,0 +1,4 @@
+coupon_name,coupon_code,start_date,end_date,"offer_type (1=Flat offer,2=Offer in percentage)",offer_rate,maximum_time_of_use,maximum_user_can_use,
+UTRK114,UTRK114,05-07-2021,31-08-2021,2,25,1,10000,
+UTRK115,UTRK115,06-07-2021,01-09-2021,2,26,2,10001,
+UTRK116,UTRK116,07-07-2021,02-09-2021,2,27,3,10002,

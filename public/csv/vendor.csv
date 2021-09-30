@@ -1,0 +1,3 @@
+name,contact_person,contact_mobile,email,password,address,state,pan,tin_number,gstin_number,servicetax_number,gst_category,account_number,ifsc_code,bank_address,description
+david,test,9876543210,david@gmail.com,123456,kolkata,wb,APAD12456,56745376487,78959384759384,9834759384,reg,6756756756,SBIN111,kolkata,description
+james,test,9876543210,james@gmail.com,123456,kolkata,wb,APAD12457,56745376488,78959384759384,9834759385,reg,6756756757,SBIN112,kolkata,description

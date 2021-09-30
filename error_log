@@ -1,0 +1,22 @@
+[06-Aug-2021 16:28:58 UTC] PHP Warning:  Uncaught ErrorException: require(admin.php): failed to open stream: No such file or directory in /home1/demo9tbi/utkarshelectricals.in/routes/web.php:24
+Stack trace:
+#0 /home1/demo9tbi/utkarshelectricals.in/routes/web.php(24): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'require(admin.p...', '/home1/demo9tbi...', 24, Array)
+#1 /home1/demo9tbi/utkarshelectricals.in/routes/web.php(24): require()
+#2 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php(35): require('/home1/demo9tbi...')
+#3 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/Router.php(416): Illuminate\Routing\RouteFileRegistrar->register('/home1/demo9tbi...')
+#4 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/Router.php(374): Illuminate\Routing\Router->loadRoutes('/home1/demo9tbi...')
+#5 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/RouteRegistrar.php(121): Ill in /home1/demo9tbi/utkarshelectricals.in/routes/web.php on line 24
+[06-Aug-2021 16:28:58 UTC] PHP Fatal error:  Illuminate\Routing\RouteFileRegistrar::main(): Failed opening required 'admin.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/demo9tbi/utkarshelectricals.in/routes/web.php on line 24
+[06-Aug-2021 16:29:04 UTC] PHP Warning:  Uncaught ErrorException: require(admin.php): failed to open stream: No such file or directory in /home1/demo9tbi/utkarshelectricals.in/routes/web.php:24
+Stack trace:
+#0 /home1/demo9tbi/utkarshelectricals.in/routes/web.php(24): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'require(admin.p...', '/home1/demo9tbi...', 24, Array)
+#1 /home1/demo9tbi/utkarshelectricals.in/routes/web.php(24): require()
+#2 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php(35): require('/home1/demo9tbi...')
+#3 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/Router.php(416): Illuminate\Routing\RouteFileRegistrar->register('/home1/demo9tbi...')
+#4 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/Router.php(374): Illuminate\Routing\Router->loadRoutes('/home1/demo9tbi...')
+#5 /home1/demo9tbi/utkarshelectricals.in/vendor/laravel/framework/src/Illuminate/Routing/RouteRegistrar.php(121): Ill in /home1/demo9tbi/utkarshelectricals.in/routes/web.php on line 24
+[06-Aug-2021 16:29:04 UTC] PHP Fatal error:  Illuminate\Routing\RouteFileRegistrar::main(): Failed opening required 'admin.php' (include_path='.:/opt/cpanel/ea-php73/root/usr/share/pear') in /home1/demo9tbi/utkarshelectricals.in/routes/web.php on line 24
+[30-Aug-2021 08:12:49 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/kaboi2pm1r04/public_html/utkarsh/vendor/laravel/framework/src/Illuminate/Support/Arr.php on line 416
+[30-Aug-2021 08:15:08 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/kaboi2pm1r04/public_html/utkarsh/vendor/laravel/framework/src/Illuminate/Support/Arr.php on line 416
+[30-Aug-2021 08:15:11 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/kaboi2pm1r04/public_html/utkarsh/vendor/laravel/framework/src/Illuminate/Support/Arr.php on line 416
+[30-Aug-2021 08:16:23 UTC] PHP Parse error:  syntax error, unexpected '=' in /home/kaboi2pm1r04/public_html/utkarsh/vendor/laravel/framework/src/Illuminate/Support/Arr.php on line 416
