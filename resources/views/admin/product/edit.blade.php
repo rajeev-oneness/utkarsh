@@ -95,9 +95,20 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label" for="code">Code</span></label>
+                            <label class="control-label" for="code">Sku Code</span></label>
                             <input class="form-control @error('code') is-invalid @enderror" type="text" name="code" id="code" value="{{ $targetproduct->code }}"/>
                             @error('code') {{ $message }} @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" for="code">HSN Code</span></label>
+                            <input class="form-control @error('hsn') is-invalid @enderror" type="text" name="hsn" id="hsn" value="{{ $targetproduct->hsn }}"/>
+                            @error('hsn') {{ $message }} @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="code">GST rate</span></label>
+                            <input type="number" class="form-control @error('gst') is-invalid @enderror" type="text" name="gst" id="gst" value="{{ $targetproduct->gst }}"/>
+                            @error('gst') {{ $message }} @enderror
                         </div>
 
                         <div class="form-group">

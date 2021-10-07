@@ -97,6 +97,16 @@
                             <input class="form-control @error('code') is-invalid @enderror" type="text" name="code" id="code" value="{{ old('code') }}"/>
                             @error('code') {{ $message }} @enderror
                         </div>
+                        <div class="form-group">
+                            <label class="control-label" for="code">HSN Code</span></label>
+                            <input class="form-control @error('hsn') is-invalid @enderror" type="text" name="hsn" id="hsn" value="{{ old('hsn') }}"/>
+                            @error('hsn') {{ $message }} @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="code">GST rate</span></label>
+                            <input type="number" class="form-control @error('gst') is-invalid @enderror" type="text" name="gst" id="gst" value="{{ old('gst') }}"/>
+                            @error('gst') {{ $message }} @enderror
+                        </div>
 
                         <div class="form-group">
                             <label class="control-label" for="product_tags">Product Tags</label>

@@ -50,7 +50,7 @@
                             <th>Name</th>
                            
                             <th>Category</th>
-                            <th>Code</th>
+                            <th>SKU Code</th>
                             <!--<th>Shipping</th>-->
                             <!--<th>Price</th>-->
                             <th>Status</th>

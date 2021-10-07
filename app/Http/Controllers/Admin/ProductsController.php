@@ -77,7 +77,7 @@ class ProductsController extends BaseController
         ]);
 
         $datas =  $request->all();
-
+        // dd($datas);
         $valid_images = array("png","jpg","jpeg","gif");
         if($request->hasFile("image") && in_array($request->image->extension(),$valid_images)){
             $profile_image = $request->image;
