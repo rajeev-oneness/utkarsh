@@ -1,19 +1,18 @@
-@extends('admin.app')
-@section('title') {{ $pageTitle }} @endsection
-@section('content')
+<?php $__env->startSection('title'); ?> <?php echo e($pageTitle); ?> <?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
     <div class="app-title">
         <div>
-            <h1><i class="fa fa-tags"></i> {{ $pageTitle }}</h1>
-            <p>{{ $subTitle }}</p>
+            <h1><i class="fa fa-tags"></i> <?php echo e($pageTitle); ?></h1>
+            <p><?php echo e($subTitle); ?></p>
         </div>
     </div>
-    @include('admin.partials.flash')
-    @php
+    <?php echo $__env->make('admin.partials.flash', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php
     $order_id = (isset($_GET['order_id']) && $_GET['order_id']!='')?$_GET['order_id']:'';
     $member_name = (isset($_GET['member_name']) && $_GET['member_name']!='')?$_GET['member_name']:'';
     $order_date = (isset($_GET['order_date']) && $_GET['order_date']!='')?$_GET['order_date']:'';
     $status = (isset($_GET['status']) && $_GET['status']!='')?$_GET['status']:'';
-    @endphp
+    ?>
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
@@ -24,21 +23,21 @@
                             <tr>
                                 
                                 <td>
-                                    <input type="text" class="form-control" name="order_id" placeholder="Order Id" value="{{$order_id}}">
+                                    <input type="text" class="form-control" name="order_id" placeholder="Order Id" value="<?php echo e($order_id); ?>">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="member_name" placeholder="Customer Name" value="{{$member_name}}">
+                                    <input type="text" class="form-control" name="member_name" placeholder="Customer Name" value="<?php echo e($member_name); ?>">
                                 </td>
                                 <td>
-                                    <input type="date" class="form-control" name="order_date" placeholder="Order Date" value="{{$order_date}}">
+                                    <input type="date" class="form-control" name="order_date" placeholder="Order Date" value="<?php echo e($order_date); ?>">
                                 </td>
                                 <td>
                                     <select class="form-control" name="status">
                                         <option value="">Select Status</option>
-                                        <option value="1" @if($status==1){{'selected'}}@endif>New Order</option>
-                                        <option value="2" @if($status==2){{'selected'}}@endif>Shipped Order</option>
-                                        <option value="3" @if($status==3){{'selected'}}@endif>Completed Order</option>
-                                        <option value="4" @if($status==4){{'selected'}}@endif>Cancelled Order</option>
+                                        <option value="1" <?php if($status==1): ?><?php echo e('selected'); ?><?php endif; ?>>New Order</option>
+                                        <option value="2" <?php if($status==2): ?><?php echo e('selected'); ?><?php endif; ?>>Shipped Order</option>
+                                        <option value="3" <?php if($status==3): ?><?php echo e('selected'); ?><?php endif; ?>>Completed Order</option>
+                                        <option value="4" <?php if($status==4): ?><?php echo e('selected'); ?><?php endif; ?>>Cancelled Order</option>
                                     </select>
                                 </td>
                                 <td>
@@ -62,46 +61,56 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @php $slno =1; @endphp
-                            @foreach($order as $products)
+                            <?php $slno =1; ?>
+                            <?php $__currentLoopData = $order; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $products): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td>{{ $slno }}</td>
-                                    <td>{{ $products->unique_code }}<br>
-                                     (@if($products->status==1){{'New Order'}}
-                                    @elseif($products->status==2){{'Order Shipped'}}
-                                    @elseif($products->status==3){{'Order Completed'}}
-                                    @elseif($products->status==4){{'Order Modified'}}
-                                    @elseif($products->status==5){{'Payment Link Raised'}}
-                                    @elseif($products->status==6){{'Order Cancelled'}}
-                                    @endif)</td>
-                                    <td>{{ $products->name }}<br>{{ $products->mobile }}</td>
-                                    <td>{{ date("d/M/Y", strtotime($products->order_date_time)) }}</td>
-                                    <td>Rs. {{ $products->total_amount }}</td>
+                                    <td><?php echo e($slno); ?></td>
+                                    <td><?php echo e($products->unique_code); ?><br>
+                                     (<?php if($products->status==1): ?><?php echo e('New Order'); ?>
+
+                                    <?php elseif($products->status==2): ?><?php echo e('Order Shipped'); ?>
+
+                                    <?php elseif($products->status==3): ?><?php echo e('Order Completed'); ?>
+
+                                    <?php elseif($products->status==4): ?><?php echo e('Order Modified'); ?>
+
+                                    <?php elseif($products->status==5): ?><?php echo e('Payment Link Raised'); ?>
+
+                                    <?php elseif($products->status==6): ?><?php echo e('Order Cancelled'); ?>
+
+                                    <?php endif; ?>)</td>
+                                    <td><?php echo e($products->name); ?><br><?php echo e($products->mobile); ?></td>
+                                    <td><?php echo e(date("d/M/Y", strtotime($products->order_date_time))); ?></td>
+                                    <td>Rs. <?php echo e($products->total_amount); ?></td>
                                     
                                     <td>
-                                    @if($products->payment_mode==1){{'Online Payment'}}
-                                    @elseif($products->payment_mode==2){{'With Wallet'}}
-                                    @elseif($products->payment_mode==3){{'COD'}}
-                                    @endif
+                                    <?php if($products->payment_mode==1): ?><?php echo e('Online Payment'); ?>
+
+                                    <?php elseif($products->payment_mode==2): ?><?php echo e('With Wallet'); ?>
+
+                                    <?php elseif($products->payment_mode==3): ?><?php echo e('COD'); ?>
+
+                                    <?php endif; ?>
                                     <br/>
                                     Transaction Id: <br>
-                                    {{ $products->transaction_id }}
+                                    <?php echo e($products->transaction_id); ?>
+
                                     </td>
                                     
                                     
                                     <td class="text-center">
                                         <div class="btn-group" role="group" aria-label="Second group">
-                                            <a href="{{ route('admin.orders.invoice', $products->id) }}" class="btn btn-sm btn-primary">Invoice</a>
-                                            <a href="{{ route('admin.orders.detail', $products->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>
-                                            <a href="{{ route('admin.orders.mapview', $products->id) }}" class="btn btn-sm btn-primary"><i class="fa fa-map-marker"></i></a>
-                                            <a href="#" data-id="{{$products['id']}}" class="sa-remove btn btn-sm btn-danger edit-btn"><i class="fa fa-trash"></i></a>
+                                            <a href="<?php echo e(route('admin.orders.invoice', $products->id)); ?>" class="btn btn-sm btn-primary">Invoice</a>
+                                            <a href="<?php echo e(route('admin.orders.detail', $products->id)); ?>" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>
+                                            <a href="<?php echo e(route('admin.orders.mapview', $products->id)); ?>" class="btn btn-sm btn-primary"><i class="fa fa-map-marker"></i></a>
+                                            <a href="#" data-id="<?php echo e($products['id']); ?>" class="sa-remove btn btn-sm btn-danger edit-btn"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </td>
                                     </tr>
 
-                                    {{-- Modal Courier Details  --}}
+                                    
 
-                                    <div class="modal fade myModal2{{$products['id']}}" tabindex="-1" role="dialog" id="myModal2{{$products['id']}}">
+                                    <div class="modal fade myModal2<?php echo e($products['id']); ?>" tabindex="-1" role="dialog" id="myModal2<?php echo e($products['id']); ?>">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -109,8 +118,8 @@
                                                 <h4 class="modal-title">Courier Details</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <p>Courier Name : <b>{{ $products['courier_name'] }} </b></p>
-                                                <p>POD No : <b>{{ $products['pod_no'] }} </b></p>
+                                                <p>Courier Name : <b><?php echo e($products['courier_name']); ?> </b></p>
+                                                <p>POD No : <b><?php echo e($products['pod_no']); ?> </b></p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -119,11 +128,11 @@
                                     </div>
                                     </div>
 
-                                    {{-- Modal Courier Details end --}}
+                                    
 
-                                    {{-- Modal Add Courier --}}
+                                    
 
-                                    <div class="modal fade" tabindex="-1" role="dialog" id="myModal1{{$products['id']}}">
+                                    <div class="modal fade" tabindex="-1" role="dialog" id="myModal1<?php echo e($products['id']); ?>">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -131,8 +140,8 @@
                                                 <h4 class="modal-title">Courier Details</h4>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('admin.orders.updatecourier',$products['id']) }}" method="post">
-                                                    @csrf
+                                                <form action="<?php echo e(route('admin.orders.updatecourier',$products['id'])); ?>" method="post">
+                                                    <?php echo csrf_field(); ?>
                                                     <div class="row">
                                                         <div class="col-md-8">
                                                             <div class="form-group">
@@ -177,24 +186,24 @@
                                     </div><!-- /.modal-dialog -->
                                 </div><!-- /.modal -->
 
-                                {{-- Modal Add Courier End --}}
+                                
 
                                 
-                            @php $slno++ @endphp
-                            @endforeach
+                            <?php $slno++ ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-@endsection
-@push('styles')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('styles'); ?>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css">
-@endpush
-@push('scripts')
-    <script type="text/javascript" src="{{ asset('backend/js/plugins/jquery.dataTables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('backend/js/plugins/dataTables.bootstrap.min.js') }}"></script>
+<?php $__env->stopPush(); ?>
+<?php $__env->startPush('scripts'); ?>
+    <script type="text/javascript" src="<?php echo e(asset('backend/js/plugins/jquery.dataTables.min.js')); ?>"></script>
+    <script type="text/javascript" src="<?php echo e(asset('backend/js/plugins/dataTables.bootstrap.min.js')); ?>"></script>
     <script type="text/javascript">$('#sampleTable').DataTable({"ordering": false});
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script>
@@ -219,4 +228,5 @@
         });
     });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\utkarsh\resources\views/admin/order/index.blade.php ENDPATH**/ ?>

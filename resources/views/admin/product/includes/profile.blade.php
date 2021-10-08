@@ -10,29 +10,26 @@
                 <td>{{ empty($targetproduct->brand)? null:$targetproduct->brand }}</td>
             </tr>
             <tr>
-                <td>Code</td>
+                <td>Sku Code</td>
                 <td>{{ empty($targetproduct->code)? null:$targetproduct->code }}</td>
             </tr>
             <tr>
+                <td>HSN Code</td>
+                <td>{{ empty($targetproduct->hsn)? null:$targetproduct->hsn }}</td>
+            </tr>
+            <tr>
                 <td>Price</td>
-                <td>{{ empty($targetproduct->price)? null:($targetproduct->price) }}</td>
+                <td>{{ empty($targetproduct->inprice)? null:($targetproduct->inprice) }}</td>
             </tr>
             <tr>
                 <td>Offered Price</td>
-                <td>{{ empty($targetproduct->offered_price)? null:$targetproduct->offered_price }}</td>
+                <td>{{ empty($targetproduct->inoffered_price)? null:$targetproduct->inoffered_price }}</td>
             </tr>
             <tr>
                 <td>GST Rate</td>
                 <td>{{ empty($targetproduct->gst)? null:$targetproduct->gst }}</td>
             </tr>
-            <tr>
-                <td>Weight</td>
-                <td>{{ empty($targetproduct->weight)? null:$targetproduct->weight }}</td>
-            </tr>
-            <tr>
-                <td>Views</td>
-                <td>{{ empty($targetproduct->views)? null:$targetproduct->views }}</td>
-            </tr>
+            
         </tbody>
     </table>
 </div>

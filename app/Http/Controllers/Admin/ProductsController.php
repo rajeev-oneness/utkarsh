@@ -268,7 +268,7 @@ class ProductsController extends BaseController
                 . " from product_reviews join users"
                 . " on (product_reviews.user_id=users.id)"
                 . " where product_reviews.product_id='$id'");
-
+        // dd($targetproduct);
         return view('admin.product.details', compact('targetproduct','reviews'));
     }
     
@@ -503,66 +503,86 @@ class ProductsController extends BaseController
       $this->setPageTitle('Import', '');
       return view('admin.product.import');
     }
-    
-    public function importProduct(Request $request){
-        $file = $_FILES['file'];
-        $filename = time() . "_" . trim($file['name']);
 
-        if(!move_uploaded_file($file['tmp_name'], './files/' . $filename)){
-            $filename = '';
-        }
-
-        $source = fopen(asset('files/'.$filename), 'r') or die("Problem open file");
-
-        $row = 0;
-        while(($data = fgetcsv($source, 1000, ",")) !== FALSE){
-        
-            if($row > 0){
-                if($data[0] != ''){
-                    $saved_data = array(
-                        'name'=>$data[0],
-                        'image'=>$data[1],
-                        'category_id'=>$data[2],
-                        'level1_id'=>$data[3],
-                        'level2_id'=>$data[4],
-                        'level3_id'=>$data[5],
-                        'level4_id'=>$data[6],
-                        'level5_id'=>$data[7],
-                        'description'=>$data[8],
-                        'brand'=>$data[9],
-                        'code'=>$data[10],
-                        'stock'=>$data[11],
-                        'inprice'=>$data[12],
-                        'inoffered_price'=>$data[13],
-                        'attr1_name'=>$data[14],
-                        'attr1_value'=>$data[15],
-                        'attr2_name'=>$data[16],
-                        'attr2_value'=>$data[17],
-                        'attr3_name'=>$data[18],
-                        'attr3_value'=>$data[19],
-                        'attr4_name'=>$data[20],
-                        'attr4_value'=>$data[21],
-                        'attr5_name'=>$data[22],
-                        'attr5_value'=>$data[23],
-                        'attr6_name'=>$data[24],
-                        'attr6_value'=>$data[25],
-                        'attr7_name'=>$data[26],
-                        'attr7_value'=>$data[27],
-                        'attr8_name'=>$data[28],
-                        'attr8_value'=>$data[29],
-                        'attr9_name'=>$data[30],
-                        'attr9_value'=>$data[31],
-                        'is_active'=>'1',
-                    );
-
-                  $product = Product::create($saved_data);
+    public function importProduct(Request $req){
+        $success = false;
+        if($req->hasFile('file')){
+            $extension= ['csv'];
+            $getExtesion = $req->file('file')->getClientOriginalExtension();
+            if(in_array($getExtesion,$extension)){
+                $path = $req->file('file')->getRealPath();
+                $firstline = true;
+                if (($handle = fopen ( $path, 'r' )) !== FALSE) {
+                    while (($data = fgetcsv ( $handle, 1000, ',' )) !== FALSE ) {
+                        if($firstline){
+                            $firstline = false;
+                            continue;
+                        }
+                        try{
+                            if($data[1] != ''){
+                                \DB::beginTransaction();
+                                
+                                $product = new Product;
+                                $product->name = $data[0];
+                                $product->image = $data[1];
+                                $product->category_id = $data[6];
+                                $product->level1_id = $data[7];
+                                $product->level2_id = $data[8];
+                                $product->level3_id = $data[9];
+                                $product->level4_id = $data[10];
+                                $product->level5_id = $data[11];
+                                $product->description = $data[12];
+                                $product->brand = $data[13];
+                                $product->code = $data[14];
+                                $product->hsn = $data[15];
+                                $product->gst = $data[16];
+                                $product->stock = $data[17];
+                                $product->inprice = $data[18];
+                                $product->inoffered_price = $data[19];
+                                $product->attr1_name = $data[20];
+                                $product->attr1_value = $data[21];
+                                $product->attr2_name = $data[22];
+                                $product->attr2_value = $data[23];
+                                $product->attr3_name = $data[24];
+                                $product->attr3_value = $data[25];
+                                $product->attr4_name = $data[26];
+                                $product->attr4_value = $data[27];
+                                $product->attr5_name = $data[28];
+                                $product->attr5_value = $data[29];
+                                $product->attr6_name = $data[30];
+                                $product->attr6_value = $data[31];
+                                $product->attr7_name = $data[32];
+                                $product->attr7_value = $data[33];
+                                $product->attr8_name = $data[34];
+                                $product->attr8_value = $data[35];
+                                $product->attr9_name = $data[36];
+                                $product->attr9_value = $data[37];
+                                $product->is_active = '1';
+                                $product->save();
+                                for ($i=2; $i <= 5; $i++) { 
+                                    if ($data[$i] != '') {
+                                        $images = new ProductImages;
+                                        $images->book_id = $product->id; 
+                                        $images->image = $data[$i];
+                                        $images->save();
+                                    }
+                                }
+                                \DB::commit();
+                                $success = true;
+                            } else {
+                                $success = false;
+                            }
+                        }catch(Exception $e){
+                            $success = false;
+                            \DB::rollback();
+                        }
+                    }
+                    if ($success === false) {
+                        return $this->responseRedirectBack('Error occurred while importing products.', 'error', true, true);
+                    }
+                    return $this->responseRedirectBack('products imported successfully' ,'success',false, false);
                 }
             }
-            $row++;
         }
-        if (!$product) {
-            return $this->responseRedirectBack('Error occurred while importing products.', 'error', true, true);
-        }
-        return $this->responseRedirectBack('products imported successfully' ,'success',false, false);
     }
 }

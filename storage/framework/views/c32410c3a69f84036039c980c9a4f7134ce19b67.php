@@ -120,6 +120,7 @@
                                             <!-- <a href="<?php echo e(route('admin.products.addsize', $products->id)); ?>" class="btn btn-sm btn-primary">Add Size</a>
                                             <a href="<?php echo e(route('admin.products.sizelist', $products->id)); ?>" class="btn btn-sm btn-primary">Size list</a> -->
                                             <a href="<?php echo e(route('admin.products.detail', $products->id)); ?>" class="btn btn-sm btn-primary"><i class="fa fa-eye"></i></a>
+                                            <a href="<?php echo e(route('admin.products.detail', $products->id)); ?>" class="btn btn-sm btn-primary"><i class="fa fa-map-pin"></i></a>
                                              <a href="#" data-id="<?php echo e($products['id']); ?>" class="sa-remove btn btn-sm btn-danger edit-btn"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </td>

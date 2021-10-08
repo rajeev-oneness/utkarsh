@@ -1,8 +1,7 @@
-@extends('site.partials.app')
-@section('title') {{ $pageTitle }} @endsection
-@section('content')
+<?php $__env->startSection('title'); ?> <?php echo e($pageTitle); ?> <?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 
-@php
+<?php
 $noofproduct = 0;
 $totalamm = 0;
 $totalqunatity = 0;
@@ -12,11 +11,11 @@ $extra_discount = 0;
 $shippingcharge = 0;
 $offer_type = Request::get('offer_type') ? Request::get('offer_type'):null;
 $offer_rate = Request::get('offer_rate') ? Request::get('offer_rate'):null;
-@endphp
+?>
 
-@if($cartProducts)
-@foreach($cartProducts as $n)
-@php
+<?php if($cartProducts): ?>
+<?php $__currentLoopData = $cartProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $n): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+<?php
 $totalamm += ($n->price * $n->quantity);
 if(!empty($offer_type) && !empty($offer_rate)){
    if($offer_type==1){
@@ -25,9 +24,9 @@ if(!empty($offer_type) && !empty($offer_rate)){
       $discount = $totalamm*$offer_rate/100;
    }
 }
-@endphp
-@endforeach
-@endif
+?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+<?php endif; ?>
 
 <section class="slice-xs sct-color-2 border-bottom">
 <div class="container container-sm">
@@ -63,16 +62,16 @@ if(!empty($offer_type) && !empty($offer_rate)){
 <div class="container">
    <div class="row cols-xs-space cols-sm-space cols-md-space">
       <div class="col-lg-8">
-         <form class="form-default" data-toggle="validator" action="{{ route('site.reviewbooking',base64_encode($bookings[0]->id)) }}"  id="guest_address" role="form" method="post">
-            @csrf
-            <input type="hidden" name="discount_amount" id="discount_amount" value="{{ $discount }}"> 
+         <form class="form-default" data-toggle="validator" action="<?php echo e(route('site.reviewbooking',base64_encode($bookings[0]->id))); ?>"  id="guest_address" role="form" method="post">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="discount_amount" id="discount_amount" value="<?php echo e($discount); ?>"> 
             <div class="card cart-card">
                <div class="card-body">
                   <div class="row">
                      <div class="col-md-12">
                         <div class="form-group">
                            <label class="control-label">Name</label>
-                           <input type="text" class="form-control" name="name" value="@if(Auth::guard('users')->check()) {{ Auth::guard('users')->user()->name }} @endif" required>
+                           <input type="text" class="form-control" name="name" value="<?php if(Auth::guard('users')->check()): ?> <?php echo e(Auth::guard('users')->user()->name); ?> <?php endif; ?>" required>
                         </div>
                      </div>
                   </div>
@@ -80,7 +79,7 @@ if(!empty($offer_type) && !empty($offer_rate)){
                      <div class="col-md-12">
                         <div class="form-group">
                            <label class="control-label">Email</label>
-                           <input type="email" class="form-control email_text" name="email" value="@if(Auth::guard('users')->check()) {{ Auth::guard('users')->user()->email }} @endif" required>
+                           <input type="email" class="form-control email_text" name="email" value="<?php if(Auth::guard('users')->check()): ?> <?php echo e(Auth::guard('users')->user()->email); ?> <?php endif; ?>" required>
                         </div>
                      </div>
                   </div>
@@ -156,13 +155,13 @@ if(!empty($offer_type) && !empty($offer_rate)){
             </div>
             <div class="row align-items-center pt-4">
                <div class="col-6">
-                  <a href="{{ route('site.viewcart') }}" class="link link--style-3">
+                  <a href="<?php echo e(route('site.viewcart')); ?>" class="link link--style-3">
                   <i class="ion-android-arrow-back"></i>
                   Return to shop
                   </a>
                </div>
                <div class="col-6 text-right">
-                  {{-- <a href="" class="btn btn-styled btn-base-1">Continue to Payment</a> --}}
+                  
                   <button type="submit" class="btn btn-styled btn-base-1">Continue to Payment</button>
                </div>
             </div>
@@ -180,7 +179,7 @@ if(!empty($offer_type) && !empty($offer_rate)){
                         </h3>
                      </div>
                      <div class="col-6 text-right">
-                        <span class="badge badge-md badge-success">{{ count($cartProducts) }} Items</span>
+                        <span class="badge badge-md badge-success"><?php echo e(count($cartProducts)); ?> Items</span>
                      </div>
                   </div>
                </div>
@@ -194,10 +193,10 @@ if(!empty($offer_type) && !empty($offer_rate)){
                      </thead>
                      <tbody>
 
-                        @if($cartProducts)
-                           @foreach($cartProducts as $n)
+                        <?php if($cartProducts): ?>
+                           <?php $__currentLoopData = $cartProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $n): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                            @php
+                            <?php
                               
                               $totalqunatity += $n->quantity;
                               if($n->price >=1000){
@@ -205,25 +204,28 @@ if(!empty($offer_type) && !empty($offer_rate)){
                               } else {
                                  $taxamm += (($n->price/105)*5) * $n->quantity;
                               }
-                           @endphp
+                           ?>
                            <tr class="cart_item">
                               <td class="product-name">
-                                 {{ $n->product_name }}
-                                 <strong class="product-quantity">× {{ $n->quantity }}</strong>
+                                 <?php echo e($n->product_name); ?>
+
+                                 <strong class="product-quantity">× <?php echo e($n->quantity); ?></strong>
                               </td>
                               <td class="product-total text-right">
-                                 <span class="pl-4">₹  @if( ($n->quantity * $n->price) >=1000 ) 
-                                 <!--{{ intval(($n->quantity * $n->price) - (($n->quantity * $n->price)) * .12) }}-->
-                                 {{ number_format(($n->quantity * (($n->price*100)/112)),2) }}
-                                    @else 
-                                <!--{{ intval(($n->quantity * $n->price) - (($n->quantity * $n->price)) * .05) }} -->
-                                {{ number_format(($n->quantity * (($n->price*100)/105)),2) }}
-                                @endif
+                                 <span class="pl-4">₹  <?php if( ($n->quantity * $n->price) >=1000 ): ?> 
+                                 <!--<?php echo e(intval(($n->quantity * $n->price) - (($n->quantity * $n->price)) * .12)); ?>-->
+                                 <?php echo e(number_format(($n->quantity * (($n->price*100)/112)),2)); ?>
+
+                                    <?php else: ?> 
+                                <!--<?php echo e(intval(($n->quantity * $n->price) - (($n->quantity * $n->price)) * .05)); ?> -->
+                                <?php echo e(number_format(($n->quantity * (($n->price*100)/105)),2)); ?>
+
+                                <?php endif; ?>
                                 </span>
                               </td>
                            </tr>
-                           @endforeach
-                        @endif
+                           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
 
                      </tbody>
                   </table>
@@ -236,28 +238,29 @@ if(!empty($offer_type) && !empty($offer_rate)){
                      </thead>
                      <tbody>
 
-                        @if($cartProducts)
-                           @foreach($cartProducts as $key => $n)
+                        <?php if($cartProducts): ?>
+                           <?php $__currentLoopData = $cartProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $n): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <tr class="cart_item">
                               <td class="product-name">
-                                 {{ $n->product_name }}
-                                 <strong class="product-quantity">× {{ $n->quantity }}</strong>
+                                 <?php echo e($n->product_name); ?>
+
+                                 <strong class="product-quantity">× <?php echo e($n->quantity); ?></strong>
                               </td>
                               <td class="product-total text-right">
                                  <span class="pl-4">₹ 0 (Flat rate)</span>
                               </td>
-                              @if($n->quantity==1 && $key==0)
-                              @php  $shippingcharge += $n->shippingcharge; @endphp
-                              @elseif($n->quantity>1 && $key==0)
-                              @php $shippingcharge += $n->shippingcharge + (($n->shippingcharge/2) *($n->quantity - 1)) @endphp
-                              @elseif($n->quantity>1)
-                              @php $shippingcharge += $n->shippingcharge/2 + (($n->shippingcharge/2) *($n->quantity - 1)) @endphp
-                              @else
-                              @php $shippingcharge += $n->shippingcharge/2 @endphp
-                              @endif
+                              <?php if($n->quantity==1 && $key==0): ?>
+                              <?php  $shippingcharge += $n->shippingcharge; ?>
+                              <?php elseif($n->quantity>1 && $key==0): ?>
+                              <?php $shippingcharge += $n->shippingcharge + (($n->shippingcharge/2) *($n->quantity - 1)) ?>
+                              <?php elseif($n->quantity>1): ?>
+                              <?php $shippingcharge += $n->shippingcharge/2 + (($n->shippingcharge/2) *($n->quantity - 1)) ?>
+                              <?php else: ?>
+                              <?php $shippingcharge += $n->shippingcharge/2 ?>
+                              <?php endif; ?>
                            </tr>
-                        @endforeach
-                        @endif
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
 
                      </tbody>
                   </table>-->
@@ -267,62 +270,62 @@ if(!empty($offer_type) && !empty($offer_rate)){
                         <tr class="cart-subtotal">
                            <th>Subtotal</th>
                            <td class="text-right">
-                              <span class="strong-600">₹ {{ number_format(($totalamm - $taxamm),2) }}</span>
+                              <span class="strong-600">₹ <?php echo e(number_format(($totalamm - $taxamm),2)); ?></span>
                            </td>
                         </tr>
                         
                         <!--<tr class="cart-subtotal">
                            <th>Subtotal</th>
                            <td class="text-right">
-                              <span class="strong-600">₹ {{ intval(($totalamm - $taxamm) + $shippingcharge) }}</span>
+                              <span class="strong-600">₹ <?php echo e(intval(($totalamm - $taxamm) + $shippingcharge)); ?></span>
                            </td>
                         </tr>-->
                         
                         <tr class="cart-subtotal">
                            <th>Billing Amount</th>
                            <td class="text-right">
-                              <span class="strong-600" id="billingamount" val="{{ round(($totalamm),2) }}">₹ {{ number_format(($totalamm),2) }}</span>
+                              <span class="strong-600" id="billingamount" val="<?php echo e(round(($totalamm),2)); ?>">₹ <?php echo e(number_format(($totalamm),2)); ?></span>
                            </td>
                         </tr>
                         <tr class="cart-shipping">
                            <th>Tax</th>
                            <td class="text-right">
-                              <span class="text-italic">₹ {{ number_format(($taxamm),2) }}</span>
+                              <span class="text-italic">₹ <?php echo e(number_format(($taxamm),2)); ?></span>
                            </td>
                         </tr>
                         <tr class="cart-total">
                            <th><span class="strong-600">Discount</span></th>
                            <td class="text-right">
-                              <strong><span id="discount">₹ {{ number_format(($discount),2) }}</span></strong>
+                              <strong><span id="discount">₹ <?php echo e(number_format(($discount),2)); ?></span></strong>
                            </td>
                         </tr>
                         <!--<tr class="cart-shipping">
                            <th>Total Shipping</th>
                            <td class="text-right">
-                              <span class="text-italic">₹ {{ intval($shippingcharge) }}</span>
+                              <span class="text-italic">₹ <?php echo e(intval($shippingcharge)); ?></span>
                            </td>
                         </tr>-->
                         
                         <!--<tr class="cart-total">
                            <th><span class="strong-600">Total</span></th>
                            <td class="text-right">
-                              <strong><span>₹ {{ number_format(($totalamm),2) }}</span></strong>
+                              <strong><span>₹ <?php echo e(number_format(($totalamm),2)); ?></span></strong>
                            </td>
                         </tr>-->
                         
                         <!--<tr class="cart-total">
                            <th><span class="strong-600">Total</span></th>
                            <td class="text-right">
-                              <strong><span>₹ {{ intval($totalamm + $shippingcharge) }}</span></strong>
+                              <strong><span>₹ <?php echo e(intval($totalamm + $shippingcharge)); ?></span></strong>
                            </td>
                         </tr>-->
                         
                      </tfoot>
                   </table>
                   <div class="mt-3">
-                     <form class="form-inline" action="<!--{{ route('site.check') }}-->" method="post">
-                     @csrf
-                     <input type="hidden" name="bookingId" value="{{ $bookings[0]->id }}">         
+                     <form class="form-inline" action="<!--<?php echo e(route('site.check')); ?>-->" method="post">
+                     <?php echo csrf_field(); ?>
+                     <input type="hidden" name="bookingId" value="<?php echo e($bookings[0]->id); ?>">         
                         <div class="form-group flex-grow-1">
                            <input type="text" class="form-control w-100" name="code" id="code" placeholder="Have coupon code? Enter here" required="">
                         </div>
@@ -337,8 +340,8 @@ if(!empty($offer_type) && !empty($offer_rate)){
    </div>
 </div>
 </section>
-@endsection
-@push('scripts')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('scripts'); ?>
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDPuZ9AcP4PHUBgbUsT6PdCRUUkyczJ66I&libraries=places">
 </script>
@@ -368,7 +371,7 @@ function firstChangeHandler(){
 
    var state_id = $(this).val();
 
-   var url = "{!! URL::to('api/city/') !!}"+'/'+state_id;
+   var url = "<?php echo URL::to('api/city/'); ?>"+'/'+state_id;
       
    $.ajax({
       type: "GET",
@@ -397,7 +400,7 @@ $('#couponcode').click(function(){
       var couponcode = $('#code').val();
       var totalamm = parseInt($('#billingamount').attr("val"));
       var discount = 0;
-      var url = "{!! URL::to('api/coupon/') !!}"+'/'+couponcode;
+      var url = "<?php echo URL::to('api/coupon/'); ?>"+'/'+couponcode;
       $.ajax({
       type: "GET",
       url: url,
@@ -428,4 +431,5 @@ $('#couponcode').click(function(){
    });
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('site.partials.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\utkarsh\resources\views/site/products/checkout.blade.php ENDPATH**/ ?>

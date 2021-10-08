@@ -214,12 +214,12 @@ class ProductController extends BaseController {
         $cart_items = Cart::where('product_name',$request->product_name)->where('product_id',$request->product_id)->where('mac',$data['mac'])->where('is_active',1)->where('is_deleted',0)->get();
 
         if(count($cart_items)>0){
-            Session::flash('error', 'This product is already added to cart.');
+            // Session::flash('error', 'This product is already added to cart.');
             //notify()->error('This product is already added to cart.', '');
             return back();
         } else {
            Cart::create($data);
-           Session::flash('success', 'This product successfully added to cart.');
+        //    Session::flash('success', 'This product successfully added to cart.');
            //notify()->success('This product successfully added to cart.', '');
         }
         

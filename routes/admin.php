@@ -284,6 +284,7 @@ Route::group(['prefix' => 'admin'], function () {
 		Route::group(['prefix'  =>   'orders'], function() {
 			Route::get('/', 'Admin\OrderController@index')->name('admin.orders.index');
 			Route::get('/{id}/view', 'Admin\OrderController@viewDetail')->name('admin.orders.detail');
+			Route::get('/{id}/map-view', 'Admin\OrderController@mapView')->name('admin.orders.mapview');
 			Route::get('/{id}/delete', 'Admin\OrderController@delete')->name('admin.orders.delete');
 			Route::post('/updatecourier/{id}', 'Admin\OrderController@updatecourier')->name('admin.orders.updatecourier');
 			Route::get('/{id}/invoice', 'Admin\OrderController@invoice')->name('admin.orders.invoice');

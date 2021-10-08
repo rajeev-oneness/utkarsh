@@ -74,6 +74,13 @@ class OrderController extends BaseController
 
         return view('admin.order.details', compact('booking','bookingProducts'));
     }
+    public function mapView($id)
+    {
+        $booking = Booking::findOrFail($id);
+        // dd($booking);
+
+        return view('admin.order.mapview', compact('booking'));
+    }
 
     /**
      * @param Request $request
